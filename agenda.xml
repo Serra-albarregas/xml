@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE agenda SYSTEM "agendaDTD.dtd">
+<agenda>
+    <contacto codigo="c1">
+        <nombre>Mauricio</nombre>
+        <apellidos>Hidalgo</apellidos>
+        <movil empresa="Vodafone">654652562</movil>
+        <movil>695656265</movil>
+        <fijo>927545152</fijo>
+        <email tipo="empresa">mauri@gmail.com</email>
+        <genero>
+            <hombre />
+        </genero>
+        <pareja codigo="c2"/>
+        <comentario>Un buen tipo</comentario>
+    </contacto>
+    <contacto codigo="c2">
+        <nombre>Fernando</nombre>
+        <apellidos>Navarro</apellidos>
+        <fijo>927215121</fijo>
+        <fijo>927545152</fijo>
+        <email tipo="personal">fernandoabogado@gmail.com</email>
+        <genero>
+            <hombre/>
+        </genero>
+        <pareja codigo="c1"/>
+        <comentario>Abogado</comentario>
+    </contacto>
+    <contacto codigo="c3">
+        <nombre>Belén</nombre>
+        <apellidos>López</apellidos>
+        <comentario>Del montón bueno</comentario>
+    </contacto>
+</agenda>

@@ -1,0 +1,16 @@
+<!ELEMENT agenda (contacto+)>
+<!ELEMENT contacto (nombre, apellidos, movil*, fijo*, email?, genero?, pareja?, comentario)>
+<!ATTLIST contacto codigo ID #REQUIRED>
+<!ELEMENT nombre (#PCDATA)>
+<!ELEMENT apellidos (#PCDATA)>
+<!ELEMENT movil (#PCDATA)>
+<!ATTLIST movil empresa CDATA #IMPLIED>
+<!ELEMENT fijo (#PCDATA)>
+<!ELEMENT email (#PCDATA)>
+<!ATTLIST email tipo (empresa | personal) #REQUIRED>
+<!ELEMENT genero (hombre | mujer)>
+<!ELEMENT hombre EMPTY>
+<!ELEMENT mujer EMPTY>
+<!ELEMENT pareja EMPTY>
+<!ATTLIST pareja codigo IDREFS #REQUIRED>
+<!ELEMENT comentario (#PCDATA)>
