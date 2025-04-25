@@ -1,91 +1,134 @@
-# Conceptos de XSD (XML Schema Definition) Utilizados
+# Teoría sobre el esquema XSD de una agenda de contactos
 
-Este documento resume todos los conceptos y construcciones utilizados en el esquema XSD del ejemplo de agenda XML.
-
----
-
-## 1. **Elementos y Tipos**
-
-- `xs:element`: Define un elemento XML.
-- `xs:complexType`: Define un tipo complejo (elemento con subelementos o atributos).
-- `xs:simpleType`: Define un tipo simple con restricciones.
+Este documento describe los principales conceptos y estructuras del fichero XSD proporcionado, que define un esquema XML para una agenda de contactos. El objetivo es comprender los elementos, atributos, tipos complejos y simples utilizados.
 
 ---
 
-## 2. **Restricciones de Valores**
+## 1. Introducción a XSD
 
-- `xs:restriction`: Restringe un tipo base con ciertas condiciones.
-- `xs:pattern`: Define una expresión regular que debe cumplirse.
-  - Ej.: Teléfonos, emails, nombres.
-- `xs:enumeration`: Lista de valores válidos predefinidos.
-  - Ej.: Tipo de email: `empresa`, `personal`.
-- `xs:minLength` / `xs:maxLength`: Define longitud mínima y máxima de una cadena.
-- `xs:minInclusive` / `xs:maxInclusive`: Define un rango válido para valores numéricos (no usado explícitamente, pero común).
+XSD (XML Schema Definition) es un lenguaje que permite definir la estructura y las reglas de validación de un documento XML. Con XSD se puede especificar:
 
----
-
-## 3. **Tipos de Datos**
-
-- `xs:string`: Texto plano.
-- `xs:ID`: Identificador único dentro del documento.
-- `xs:IDREF`: Referencia a un `xs:ID`.
-- `xs:IDREFS`: Lista de referencias a varios `xs:ID`s.
-- `xs:anyType`: Acepta cualquier contenido. Usado para elementos vacíos (`<hombre />`).
+- Qué elementos y atributos pueden aparecer.
+- En qué orden deben ir.
+- Qué tipo de datos contienen.
+- Reglas de validación como longitudes, patrones, enumeraciones, etc.
 
 ---
 
-## 4. **Estructura del Contenido**
+## 2. Tipos de elementos
 
-- `xs:sequence`: Especifica un orden obligatorio de los subelementos.
-- `xs:choice`: Permite elegir entre varios elementos posibles (uno solo).
-  - Ej.: Género como `hombre` o `mujer`.
+### 2.1 Elementos complejos (`xs:complexType`)
 
----
+Los elementos complejos son aquellos que contienen otros elementos o/y atributos.
 
-## 5. **Atributos**
+Dentro de un elemento complejo podemos encontrar:
+- Secuencia de elementos.
+- Contenido simple extendido.
+- Una seleción de elementos.
+- Un elemento vacío (con o sin atributos).
 
-- `xs:attribute`: Define un atributo para un elemento.
-- `use="required"`: El atributo es obligatorio.
-- `use="optional"`: El atributo es opcional.
-- `default`: (No usado en el ejemplo) define un valor por defecto si no se proporciona.
+En el esquema se encuentran varios:
 
----
+#### `agenda`
 
-## 6. **Ocurrencias**
+- Contiene una **secuencia** de elementos `contacto`.
+- Puede tener múltiples contactos (`maxOccurs="unbounded"`).
 
-- `minOccurs` / `maxOccurs`: Número mínimo/máximo de veces que puede aparecer un elemento.
-  - Ej.: `<movil>` puede repetirse (varios móviles por contacto).
+#### `contacto`
 
----
+- Contiene los datos de una persona: `nombre`, `apellidos`, `movil`, `fijo`, `email`, `genero`, `pareja`, `comentario`.
+- Algunos elementos son opcionales (`minOccurs="0"`) y/o repetibles (`maxOccurs="unbounded"`).
+- Tiene un atributo obligatorio `codigo`.
 
-## 7. **Tipos Personalizados**
+#### `movil` y `email`
 
-- Definición de nuevos tipos reutilizables usando `xs:simpleType` o `xs:complexType` con nombre:
-  - `telefonoMovilType`
-  - `telefonoFijoType`
-  - `emailString`
-  - `movilType`, `emailType`, `generoType`, `parejaType`
+- Son elementos complejos con **contenido simple extendido** (`xs:simpleContent` y `xs:extension`): contienen texto, pero además incluyen atributos (`empresa` para `movil`, `tipo` para `email`).
 
----
+#### `genero`
 
-## 8. **Contenido con Atributos**
+- Utiliza una estructura de elección (`xs:choice`) entre dos posibles subelementos: `hombre` o `mujer`.
 
-- `xs:simpleContent` + `xs:extension`: Permite que un elemento tenga contenido simple (texto) y atributos.
-  - Ej.: `<movil empresa="...">654654...</movil>`
+#### `pareja`
 
----
+- Es un elemento vacío, pero con un atributo `codigo` que es una referencia (`xs:IDREF`) a otro contacto de la agenda.
 
-## 9. **Validación de Formatos Específicos (Patrones)**
+#### `hombre` y `mujer`
 
-- Teléfonos móviles: `6\d{8}|7\d{8}`
-- Teléfonos fijos: `9\d{8}`
-- Email: `[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}`
-- Nombre propio: `[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+`
+- Son elementos definidos como vacíos (sin contenido ni atributos), usados como marcadores.
 
 ---
 
-## 10. **Relaciones entre Elementos**
+### 2.2 Elementos simples (`xs:element` con tipo simple)
 
-- Uso de `xs:ID` y `xs:IDREFS` para vincular contactos (relación de pareja).
+- `nombre`, `apellidos`, `comentario`: texto simple (`xs:string`).
+- `fijo`: usa el tipo `movil-type`, definido con validación de formato.
+  
+---
+
+## 3. Tipos simples (`xs:simpleType`)
+
+Los tipos simples definen restricciones sobre tipos de datos básicos.
+
+### `movil-type`
+
+- Tipo de dato basado en `xs:string`.
+- Usa una expresión regular (`pattern`) para validar que el valor sea un número de 9 dígitos (`\d{9}`).
+
+### `email-type`
+
+- Tipo de dato basado en `xs:string`.
+- Valida que el contenido tenga un formato básico de email: `[^@]+@[^@]+\.[^@]+`.
+
+---
+
+## 4. Atributos (`xs:attribute`)
+
+Los atributos permiten añadir información adicional a los elementos.
+
+### `codigo` (referenciado por `contacto` y `pareja`)
+
+- Definido como tipo ID con patrón `c[0-9]+`, por ejemplo: `c001`.
+
+### `empresa`
+
+- Atributo sin restricciones específicas, usado en el elemento `movil`.
+
+### `tipo`
+
+- Define si un email es de tipo `personal` o `empresa`, mediante enumeración.
+
+---
+
+## 5. Estructuras destacadas
+
+### 5.1 `xs:sequence`
+
+- Se usa para establecer un orden fijo de los subelementos.
+
+### 5.2 `xs:choice`
+
+- Permite una selección entre varios subelementos (como en el género).
+
+### 5.3 `xs:extension`
+
+- Se usa dentro de `xs:simpleContent` para extender tipos simples con atributos.
+
+---
+
+## 6. Relaciones
+
+- El atributo `codigo` es un identificador único (`xs:ID`).
+- El elemento `pareja` referencia a otro `contacto` mediante un ID (`xs:IDREF`), estableciendo una relación entre contactos.
+
+---
+
+## 7. Validaciones
+
+Las validaciones se realizan mediante:
+
+- **Restricciones de ocurrencia** (`minOccurs`, `maxOccurs`).
+- **Patrones de expresiones regulares** para tipos como móvil y email.
+- **Enumeraciones** para restringir valores posibles (como el tipo de email).
+- **Tipos de datos estándar** de XML Schema (`xs:string`, `xs:ID`, etc.).
 
 ---

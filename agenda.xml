@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE agenda SYSTEM "agenda.dtd">
-<agenda>
+
+<agenda xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="agenda2.xsd">
     <contacto codigo="c1">
         <nombre>Mauricio</nombre>
         <apellidos>Hidalgo</apellidos>
@@ -21,7 +21,7 @@
         <fijo>927545152</fijo>
         <email tipo="personal">fernandoabogado@gmail.com</email>
         <genero>
-            <hombre/>
+            <hombre />
         </genero>
         <pareja codigo="c1"/>
         <comentario>Abogado</comentario>

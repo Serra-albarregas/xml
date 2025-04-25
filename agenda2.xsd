@@ -1,0 +1,111 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <!-- ELEMENTOS COMPLEJOS -->
+    <!-- Agenda -->
+    <xs:element name="agenda">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="contacto" maxOccurs="unbounded"></xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <!-- Contacto -->
+    <xs:element name="contacto">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="nombre"></xs:element>
+                <xs:element ref="apellidos"></xs:element>
+                <xs:element ref="movil" minOccurs="0" maxOccurs="unbounded"></xs:element>
+                <xs:element ref="fijo" minOccurs="0" maxOccurs="unbounded"></xs:element>
+                <xs:element ref="email" minOccurs="0" maxOccurs="1"></xs:element>
+                <xs:element ref="genero" minOccurs="0" maxOccurs="1"></xs:element>
+                <xs:element ref="pareja" minOccurs="0" maxOccurs="1"></xs:element>
+                <xs:element ref="comentario"></xs:element>
+            </xs:sequence>
+            <xs:attribute ref="codigo" use="required"></xs:attribute>
+        </xs:complexType>
+    </xs:element>
+    <!-- Movil -->
+    <xs:element name="movil">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="movil-type">
+                    <xs:attribute ref="empresa"></xs:attribute>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+    <!-- Email-->
+    <xs:element name="email">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="email-type">
+                    <xs:attribute ref="tipo"></xs:attribute>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+    <!-- Genero -->
+    <xs:element name="genero">
+        <xs:complexType>
+            <xs:choice>
+                <xs:element ref="hombre"></xs:element>
+                <xs:element ref="mujer"></xs:element>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+    <!-- Pareja -->
+    <xs:element name="pareja">
+        <xs:complexType>
+            <xs:attribute name="codigo" type="xs:IDREF"/>
+        </xs:complexType>
+    </xs:element>
+    <!-- Hombre -->
+    <xs:element name="hombre">
+        <xs:complexType></xs:complexType>
+    </xs:element>
+    <!-- Mujer -->
+    <xs:element name="mujer">
+        <xs:complexType></xs:complexType>
+    </xs:element>
+
+    <!-- ELEMENTOS SIMPLES -->
+    <xs:element name="nombre" type="xs:string"></xs:element>
+    <xs:element name="apellidos" type="xs:string"></xs:element>
+    <xs:element name="fijo" type="movil-type"></xs:element>
+    <xs:element name="comentario" type="xs:string"></xs:element>
+
+
+    <!-- ATRIBUTOS -->
+    <xs:attribute name="codigo">
+        <xs:simpleType>
+            <xs:restriction base="xs:ID">
+                <xs:pattern value="c[0-9]+" />
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:attribute>
+
+    <xs:attribute name="empresa" type="xs:string"></xs:attribute>
+
+    <xs:attribute name="tipo">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="personal"/>
+                <xs:enumeration value="empresa"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:attribute>
+
+    <!-- TIPOS SIMPLES -->
+    <xs:simpleType name="movil-type">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="\d{9}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="email-type">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[^@]+@[^@]+\.[^@]+"></xs:pattern>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>
