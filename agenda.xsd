@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="agenda">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="contacto" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="nombre" type="xs:string"/>
+              <xs:element name="apellidos" type="xs:string"/>
+              <xs:element name="movil" type="movilType" minOccurs="0" maxOccurs="unbounded"/>
+              <xs:element name="fijo" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+              <xs:element name="email" type="emailType" minOccurs="0"/>
+              <xs:element name="genero" type="generoType" minOccurs="0"/>
+              <xs:element name="pareja" type="parejaType" minOccurs="0"/>
+              <xs:element name="comentario" type="xs:string"/>
+            </xs:sequence>
+            <xs:attribute name="codigo" type="xs:ID" use="required"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- Tipo complejo para <movil> con atributo empresa -->
+  <xs:complexType name="movilType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="empresa" type="xs:string" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <!-- Tipo complejo para <email> con atributo tipo -->
+  <xs:complexType name="emailType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="tipo" use="required">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="empresa"/>
+              <xs:enumeration value="personal"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <!-- Género como elección entre hombre y mujer -->
+  <xs:complexType name="generoType">
+    <xs:choice>
+      <xs:element name="hombre" type="xs:anyType"/>
+      <xs:element name="mujer" type="xs:anyType"/>
+    </xs:choice>
+  </xs:complexType>
+
+  <!-- Pareja referenciando a otros contactos -->
+  <xs:complexType name="parejaType">
+    <xs:attribute name="codigo" type="xs:IDREFS" use="required"/>
+  </xs:complexType>
+
+</xs:schema>

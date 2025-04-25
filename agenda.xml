@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE agenda SYSTEM "agendaDTD.dtd">
+<!DOCTYPE agenda SYSTEM "agenda.dtd">
 <agenda>
     <contacto codigo="c1">
         <nombre>Mauricio</nombre>
